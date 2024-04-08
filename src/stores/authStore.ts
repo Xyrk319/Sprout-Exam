@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import axiosHelper from '@/helpers/axiosHelper';
-import LoginPayload from '@interfaces/LoginPayload';
+import type LoginPayload from '@interfaces/LoginPayload';
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -29,7 +29,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         const response = await axiosHelper.post(`${import.meta.env.VITE_BACKEND_URL}/login`, userData);
         this.setToken(response.data.token);
-        this.setUser(response.data.user); // Adjust based on your API response
+        this.setUser(response.data.user);
         this.status = 'success';
       } catch (error) {
         this.status = 'error';
