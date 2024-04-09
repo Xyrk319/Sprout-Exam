@@ -9,7 +9,7 @@ const routes = [
     },
     {
         path: '/',
-        name: 'home',
+        name: 'Home',
         component: HomeView,
         meta : {
             requiresAuth : true,
