@@ -51,14 +51,13 @@ const onSubmit = async (values) => {
   console.log(errors.value, emailError, passwordError);
   try {
     
-    // Use values.email and values.password here
     const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/login`, {
       email: values.email,
       password: values.password,
     });
-    const token = response.data.access_token; // Ensure this matches your API response
+    const token = response.data.access_token; 
     localStorage.setItem(`${import.meta.env.VITE_APP_NAME}_token`, token);
-    router.push('/dashboard');
+    router.push('/home');
   } catch (error) {
     console.error('Login failed', error?.response?.data ?? error);
   }
