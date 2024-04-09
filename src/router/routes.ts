@@ -1,5 +1,7 @@
 import HomeView from "@/views/HomeView.vue";
+import AuthLayout from "@/views/Layouts/AuthLayout.vue";
 import LoginView from "@/views/LoginView.vue";
+import EmployeeView from "../views/Employee/EmployeeView.vue";
 
 const routes = [
     {
@@ -9,11 +11,24 @@ const routes = [
     },
     {
         path: '/',
-        name: 'Home',
-        component: HomeView,
+        name: 'AuthenticatedLayout',
+        component: AuthLayout,
         meta : {
             requiresAuth : true,
-        }
+        },
+        children: [
+            {
+                path: '/home',
+                name: 'Home',
+                component: HomeView
+            },
+            {
+                path: '/employees',
+                name: 'Employees',
+                component: EmployeeView
+
+            },
+        ],
     }
 ];
 
