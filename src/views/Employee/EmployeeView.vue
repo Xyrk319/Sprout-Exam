@@ -31,7 +31,6 @@
       </div>
     </template>
   </FwbModal>
-  <Dialog :message="dialogMessage" @confirm="deleteEntry" ref="dialogRef"/>
 </template>
   
 <script setup>
@@ -80,6 +79,18 @@ let columns = [
         field: "employee_type",
         type: "enum",
         enumUrl: `${import.meta.env.VITE_BACKEND_URL}/employees/types`
+    },
+    {
+        name: "benefits",
+        label: "Benefits",
+        field: "benefits",
+        type: "array",
+    },
+    {
+        name: "projects",
+        label: "Projects",
+        field: "projects",
+        type: "array",
     },
     {
         name: "actions",

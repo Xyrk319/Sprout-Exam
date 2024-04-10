@@ -17,6 +17,9 @@
                         <div v-else-if="column.type === 'enum'">
                             {{ getEnumValue(datum[column.name], column.enumUrl) }}
                         </div>
+                        <div v-else-if="column.type === 'array'">
+                            {{ getArrayValue(datum[column.name]) }}
+                        </div>
                         <div v-else> {{ datum[column.name] }} </div>
                     </td>
                 </tr>
@@ -67,5 +70,11 @@ const getEnumValue = (key, url) => {
     return enumValues.value[url]?.find(enumItem => enumItem.id === key)?.text || key;
 };
 
+const getArrayValue = (key) => {
+    if (Array.isArray(key)) {
+        return key.map(item => item.name).join(', ');
+    }
+    return '';
+}
 defineExpose({ getData });
 </script>
