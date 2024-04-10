@@ -39,8 +39,6 @@ import {useAuthStore} from '@/stores/authStore';
 
 const auth = useAuthStore();
 
-console.log(auth);
-
 const logout = () => {
   auth.logout();
 }

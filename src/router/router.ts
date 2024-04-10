@@ -9,7 +9,6 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
-  console.log(to.matched.some(record => record.meta.requiresAuth), !authStore.isAuthenticated);
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!authStore.isAuthenticated) {
       next({ name: 'Login' });
@@ -17,6 +16,9 @@ router.beforeEach((to, from, next) => {
       next(); 
     }
   } else {
+    if(authStore.isAuthenticated) {
+      next({ name: 'Home' });
+    }
     next();
   }
 });
