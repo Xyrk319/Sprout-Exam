@@ -50,6 +50,18 @@
       <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contract End Date</label>
       <VueDatePicker v-model="contractEndDate"></VueDatePicker>
     </div>
+    <div v-if="employeeType == 1">
+      <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Benefits</label>
+      <MultiSelect v-model="selectedBenefits" :options="benefits" optionLabel="name" placeholder="Select Benefits"
+      :maxSelectedLabels="5" class="w-full md:w-20rem" />
+    </div>
+    <div v-if="employeeType == 2">
+      <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Projects</label>
+      <MultiSelect v-model="selectedProjects" :options="projects" optionLabel="name" placeholder="Select Projects"
+      :maxSelectedLabels="5" class="w-full md:w-20rem" />
+    </div>
+    
+    
   </div>
   
 </template>
@@ -62,6 +74,7 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import axiosHelper from '@/helpers/axiosHelper';
 import { useForm, useField } from 'vee-validate';
 import * as yup from 'yup';
+import MultiSelect from 'primevue/multiselect';
 
 
 const props = defineProps({
@@ -70,6 +83,9 @@ const props = defineProps({
     default: () => {}
   }
 });
+
+let projects = ref(null);
+let benefits = ref(null);
 
 const emit = defineEmits(['submitted']);
 
@@ -80,6 +96,8 @@ const form = yup.object({
   employeeType: yup.string().required('Employee type is required!'),
   numLeaves: yup.number(),
   contractEndDate: yup.date().nullable(),
+  selectedBenefits: yup.array(),
+  selectedProjects: yup.array(),
 });
 
 const { handleSubmit, errors } = useForm({
@@ -92,6 +110,8 @@ const { value: email, errorMessage: emailError } = useField('email');
 const { value: employeeType, errorMessage: employeeTypeError } = useField('employeeType');
 const { value: numLeaves, errorMessage: numLeavesError } = useField('numLeaves');
 const { value: contractEndDate, errorMessage: contractEndDateError } = useField('contractEndDate');
+const { value: selectedBenefits, errorMessage: selectedBenefitsError } = useField('selectedBenefits');
+const { value: selectedProjects, errorMessage: selectedProjectsError } = useField('selectedProjects');
 
 const submitForm = () => {
   handleSubmit(onSubmit)();
@@ -106,7 +126,9 @@ const onSubmit = async (values) => {
         last_name: values.lastName,
         number_of_leaves: values.numLeaves,
         contract_end_date: values.contractEndDate,
-        employee_type: values.employeeType
+        employee_type: values.employeeType,
+        benefits: values.selectedBenefits,
+        projects: values.selectedProjects
       });
     }else{
       await axiosHelper.post(`${import.meta.env.VITE_BACKEND_URL}/employees`, {
@@ -115,7 +137,9 @@ const onSubmit = async (values) => {
         last_name: values.lastName,
         number_of_leaves: values.numLeaves,
         contract_end_date: values.contractEndDate,
-        employee_type: values.employeeType
+        employee_type: values.employeeType,
+        benefits: values.selectedBenefits,
+        projects: values.selectedProjects
       });
     }
     emit('submitted');
@@ -133,11 +157,19 @@ onMounted(() => {
     employeeType.value = props.employee.employee_type;
     numLeaves.value = props.employee.number_of_leaves;
     contractEndDate.value = props.employee.contract_end_date;
+    selectedBenefits.value = props.employee.benefits;
+    selectedProjects.value = props.employee.projects;
   }
   axiosHelper.get(`${import.meta.env.VITE_BACKEND_URL}/employees/types`).then((response) => {
     employeeTypes.value = response.data.map((type) => {
         return { value: type.id, name: type.text };
     });
+  });
+  axiosHelper.get(`${import.meta.env.VITE_BACKEND_URL}/projects`).then((response) => {
+    projects.value = response.data;
+  });
+  axiosHelper.get(`${import.meta.env.VITE_BACKEND_URL}/benefits`).then((response) => {
+    benefits.value = response.data;
   });
 })
 

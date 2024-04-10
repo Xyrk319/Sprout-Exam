@@ -6,9 +6,8 @@
                 <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Sprout Exam</span>
             </a>
             <div class="flex items-center space-x-3 md:order-2 md:space-x-0 rtl:space-x-reverse">
-                <button type="button" class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
-                    <span class="sr-only">Open user menu</span>
-                    <img class="w-8 h-8 rounded-full" src="https://icon-library.com/images/avatar-icon-images/avatar-icon-images-4.jpg" alt="user photo">
+                <button type="button" @click="logout" class="flex text-sm rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
+                    <ArrowLeftStartOnRectangleIcon class="w-8 h-8 rounded-md" />
                 </button>
             </div>
         </div>
@@ -18,11 +17,13 @@
 <script setup>
 
 import {useAuthStore} from '@/stores/authStore';
+import { ArrowLeftStartOnRectangleIcon } from '@heroicons/vue/24/solid';
 
 const auth = useAuthStore();
 
 const logout = () => {
   auth.logout();
+  window.location.href = '/login';
 }
 
 </script>

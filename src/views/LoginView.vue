@@ -56,7 +56,7 @@ const onSubmit = async (values) => {
     });
     const token = response.data.access_token; 
     localStorage.setItem(`${import.meta.env.VITE_APP_NAME}_token`, token);
-    router.push(router.resolve({ name: 'Home' }).path);
+    window.location.href = '/';
   } catch (error) {
     console.error('Login failed', error?.response?.data ?? error);
   }
