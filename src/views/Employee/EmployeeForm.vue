@@ -65,7 +65,10 @@ import * as yup from 'yup';
 
 
 const props = defineProps({
-  employeeId: String
+  employee: {
+    type: Object,
+    default: () => {}
+  }
 });
 
 const emit = defineEmits(['submitted']);
@@ -96,8 +99,8 @@ const submitForm = () => {
 
 const onSubmit = async (values) => {
   try {
-    if(props.employeeId) {
-      await axiosHelper.put(`${import.meta.env.VITE_BACKEND_URL}/employees/${props.employeeId}`, {
+    if(props.employee) {
+      await axiosHelper.put(`${import.meta.env.VITE_BACKEND_URL}/employees/${props.employee.id}`, {
         email: values.email,
         first_name: values.firstName,
         last_name: values.lastName,
@@ -123,8 +126,13 @@ const onSubmit = async (values) => {
 
 let employeeTypes = ref(null);
 onMounted(() => {
-  if (props.employeeId) {
-    axiosHelper.get(`${import.meta.env.VITE_BACKEND_URL}/employees/${props.employeeId}`)
+  if (props.employee) {
+    firstName.value = props.employee.first_name;
+    lastName.value = props.employee.last_name;
+    email.value = props.employee.email;
+    employeeType.value = props.employee.employee_type;
+    numLeaves.value = props.employee.number_of_leaves;
+    contractEndDate.value = props.employee.contract_end_date;
   }
   axiosHelper.get(`${import.meta.env.VITE_BACKEND_URL}/employees/types`).then((response) => {
     employeeTypes.value = response.data.map((type) => {
