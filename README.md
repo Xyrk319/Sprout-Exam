@@ -44,3 +44,7 @@ an architectural design.
 6. Create a users page
 
 
+## Tech
+
+npm 8.5.5
+node v16.15.1
