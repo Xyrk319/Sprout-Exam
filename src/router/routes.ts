@@ -1,7 +1,7 @@
 import HomeView from "@/views/HomeView.vue";
-import AuthLayout from "@/views/Layouts/AuthLayout.vue";
-import LoginView from "@/views/LoginView.vue";
-import EmployeeView from "../views/Employee/EmployeeView.vue";
+import AuthLayout from '@views/Layouts/AuthLayout.vue';
+import LoginView from '@views/LoginView.vue';
+import EmployeeView from '@views/Employee/EmployeeView.vue';
 
 const routes = [
     {
