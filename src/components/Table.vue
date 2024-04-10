@@ -43,7 +43,7 @@ const props = defineProps({
 const data = ref([]);
 const enumValues = ref({});
 
-onMounted(async () => {
+const getData = async () => {
     try {
         const response = await axiosHelper.get(props.url);
         if(response.status === 200){
@@ -59,8 +59,13 @@ onMounted(async () => {
             enumValues.value[column.enumUrl] = response.data;
         }
     }));
+}
+onMounted(async () => {
+    getData();
 });
 const getEnumValue = (key, url) => {
     return enumValues.value[url]?.find(enumItem => enumItem.id === key)?.text || key;
 };
+
+defineExpose({ getData });
 </script>
