@@ -1,37 +1,38 @@
 <template>
-    <div>
-        <div class="flex justify-between">
-            <h1 class="text-2xl font-bold">Employees</h1>
-            <Button @click="showCreateModal()" type="primary" text="Add Employee"/>
-        </div>
-    </div>
-    <Table ref="tableRef" :columns="columns" :url="baseUrl">
-      <template v-slot:actions="{ data, index }" slot="actions">
-        <Button type="primary" @click="showEditModal(data)" text="Edit"/> 
-        <Button type="danger" text="Delete"/> 
-      </template>
-    </Table>
-    <FwbModal size="xl" v-if="isShowModal" @close="closeModal">
-      <template #header>
-        <div class="flex items-center text-lg">
-          {{ modalTitle }}
-        </div>
-      </template>
-      <template #body>
-        <EmployeeForm ref="employeeFormRef" :employee="selectedEmployee" @submitted="closeModal"/>
-      </template>
-      <template #footer>
-        <div class="flex justify-between">
-          <FwbButton @click="closeModal" color="alternative">
-            Cancel
-          </FwbButton>
-          <FwbButton @click="submitForm" color="green">
-            Save
-          </FwbButton>
-        </div>
-      </template>
-    </FwbModal>
-  </template>
+  <div>
+      <div class="flex justify-between">
+          <h1 class="text-2xl font-bold">Employees</h1>
+          <Button @click="showCreateModal()" type="primary" text="Add Employee"/>
+      </div>
+  </div>
+  <Table ref="tableRef" :columns="columns" :url="baseUrl">
+    <template v-slot:actions="{ data, index }" slot="actions">
+      <Button type="primary" @click="showEditModal(data)" text="Edit"/> 
+      <Button type="danger" @click="deleteEntry(data)"text="Delete"/> 
+    </template>
+  </Table>
+  <FwbModal size="xl" v-if="isShowModal" @close="closeModal">
+    <template #header>
+      <div class="flex items-center text-lg">
+        {{ modalTitle }}
+      </div>
+    </template>
+    <template #body>
+      <EmployeeForm ref="employeeFormRef" :employee="selectedEmployee" @submitted="closeModal"/>
+    </template>
+    <template #footer>
+      <div class="flex justify-between">
+        <FwbButton @click="closeModal" color="alternative">
+          Cancel
+        </FwbButton>
+        <FwbButton @click="submitForm" color="green">
+          Save
+        </FwbButton>
+      </div>
+    </template>
+  </FwbModal>
+  <Dialog :message="dialogMessage" @confirm="deleteEntry" ref="dialogRef"/>
+</template>
   
 <script setup>
 import { ref, computed, onMounted } from 'vue';
@@ -39,6 +40,7 @@ import { FwbButton, FwbModal } from 'flowbite-vue';
 import EmployeeForm from './EmployeeForm.vue'; // Assume this is your form component
 import Table from '@components/Table.vue';
 import Button from '@/components/Button.vue';
+import axiosHelper from '@/helpers/axiosHelper';
 
 let baseUrl = `${import.meta.env.VITE_BACKEND_URL}/employees`;
 let columns = [
@@ -113,6 +115,17 @@ function submitForm() {
     console.error("Form submission failed: Form reference not found.");
   }
 }
+
+function deleteEntry(employee) {
+  axiosHelper
+    .delete(`${import.meta.env.VITE_BACKEND_URL}/employees/${employee.id}`)
+    .then(() => {
+      tableRef.value.getData();
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
 
 let modalTitle = computed(() => selectedEmployee.value ? 'Edit Employee' : 'Add Employee');
 </script>
