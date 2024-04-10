@@ -20,13 +20,9 @@ const props = defineProps({
 });
 
 const router = useRouter();
-
-
-
 let currentRouteName = useRouter().currentRoute
 
 let isActive = computed(()=> {
-  console.log( currentRouteName.value.name , props.routeName)
   return currentRouteName.value.name == props.routeName;
 });
 

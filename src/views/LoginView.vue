@@ -48,7 +48,6 @@ const submitForm = () => {
 };
 
 const onSubmit = async (values) => {
-  console.log(errors.value, emailError, passwordError);
   try {
     
     const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/login`, {
